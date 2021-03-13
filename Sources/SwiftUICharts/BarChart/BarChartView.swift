@@ -15,10 +15,10 @@ public struct BarChartView : View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    public var formSize:CGSize
+    public var formSize: CGSize
     public var dropShadow: Bool
     public var cornerImage: Image
-    public var valueSpecifier:String
+    public var valueSpecifier: String
     
     @State private var touchLocation: CGFloat = -1.0
     @State private var showValue: Bool = false
@@ -33,7 +33,7 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == ChartForm.large
     }
-    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, darkModeStyle: ChartStyle = Styles.barChartStyleOrangeDark, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
+    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, darkModeStyle: ChartStyle = Styles.barChartStyleOrangeDark, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%d"){
         self.data = data
         self.title = title
         self.legend = legend
@@ -107,23 +107,17 @@ public struct BarChartView : View {
     }
     
     func getArrowOffset(touchLocation:CGFloat) -> Binding<CGFloat> {
-        let realLoc = (self.touchLocation * self.formSize.width) - 50
-        if realLoc < 10 {
-            return .constant(realLoc - 10)
-        }else if realLoc > self.formSize.width-110 {
-            return .constant((self.formSize.width-110 - realLoc) * -1)
-        } else {
-            return .constant(0)
-        }
+        let realLoc = (self.touchLocation * self.formSize.width)
+        return .constant(realLoc - UIScreen.main.bounds.width/2 + 20)
     }
     
     func getLabelViewOffset(touchLocation:CGFloat) -> CGFloat {
-        return min(self.formSize.width-110,max(10,(self.touchLocation * self.formSize.width) - 50))
+        return CGFloat(8)
     }
     
     func getCurrentValue() -> (String,Double)? {
-        guard self.data.points.count > 0 else { return nil}
-        let index = max(0,min(self.data.points.count-1,Int(floor((self.touchLocation*self.formSize.width)/(self.formSize.width/CGFloat(self.data.points.count))))))
+        guard self.data.points.count > 0 else { return nil }
+        let index = max(0, min(self.data.points.count-1,Int(floor((self.touchLocation*self.formSize.width)/(self.formSize.width/CGFloat(self.data.points.count))))))
         return self.data.points[index]
     }
 }
