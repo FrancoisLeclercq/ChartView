@@ -22,11 +22,12 @@ public struct BarChartRow : View {
     @Binding var touchLocation: CGFloat
     public var body: some View {
         GeometryReader { geometry in
-            HStack(alignment: .bottom, spacing: (geometry.frame(in: .local).width - 16)/CGFloat(self.data.count * 3)){
+            HStack(alignment: .bottom) {
                 ForEach(0..<self.data.count, id: \.self) { i in
+		   if (i != 0) { Spacer() }
                     BarChartCell(value: self.normalizedValue(index: i),
                                  index: i,
-                                 width: Float(geometry.frame(in: .local).width - 16),
+                                 width: Float(geometry.frame(in: .local).width),
                                  numberOfDataPoints: self.data.count,
                                  accentColor: self.accentColor,
                                  gradient: self.gradient,
@@ -35,7 +36,7 @@ public struct BarChartRow : View {
                         .animation(.spring())
                     
                 }
-            }.padding(.leading, 16)
+            }.padding(.horizontal, 16).frame(width: UIScreen.main.bounds.width - 20, alignment: .center)
         }
     }
     
