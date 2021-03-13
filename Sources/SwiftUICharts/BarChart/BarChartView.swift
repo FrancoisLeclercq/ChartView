@@ -33,12 +33,12 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == ChartForm.large
     }
-    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
+    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, darkModeStyle: ChartStyle = Styles.barChartStyleOrangeDark, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
         self.data = data
         self.title = title
         self.legend = legend
         self.style = style
-        self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
+        self.darkModeStyle = darkModeStyle
         self.formSize = form!
         self.dropShadow = dropShadow!
         self.cornerImage = cornerImage!
@@ -54,24 +54,17 @@ public struct BarChartView : View {
                 HStack{
                     if(!showValue) {
                         Text(self.title)
-                            .font(.headline)
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
+                            .font(.title).bold()
+                            .foregroundColor(.primary)
                     } else {
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
-                            .font(.headline)
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
-                    }
-                    if(self.formSize == ChartForm.large && self.legend != nil && !showValue) {
-                        Text(self.legend!)
-                            .font(.callout)
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor)
-                            .transition(.opacity)
-                            .animation(.easeOut)
+                            .font(.title).bold()
+                            .foregroundColor(.primary)
                     }
                     Spacer()
                     self.cornerImage
                         .imageScale(.large)
-                        .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
+                        .foregroundColor(.primary)
                 }.padding()
                 BarChartRow(data: data.points.map{$0.1},
                             accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
@@ -80,13 +73,13 @@ public struct BarChartView : View {
                 if (self.legend != nil  && (self.formSize == ChartForm.medium || self.formSize == ChartForm.large) && !self.showLabelValue) {
                     Text(self.legend!)
                         .font(.headline)
-                        .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
+                        .foregroundColor(.primary)
                         .padding()
                 } else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
                     LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation),
                               title: .constant(self.getCurrentValue()!.0))
                         .offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
-                        .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
+                        .foregroundColor(.primary)
                 }
                 
             }
