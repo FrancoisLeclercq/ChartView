@@ -49,15 +49,14 @@ public struct BarChartView : View {
         ZStack{
             Rectangle()
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                .cornerRadius(20)
                 .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 HStack{
-                    if(!showValue){
+                    if(!showValue) {
                         Text(self.title)
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
-                    }else{
+                    } else {
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
@@ -78,12 +77,12 @@ public struct BarChartView : View {
                             accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
                             gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
                             touchLocation: self.$touchLocation)
-                if self.legend != nil  && self.formSize == ChartForm.medium && !self.showLabelValue{
+                if (self.legend != nil  && (self.formSize == ChartForm.medium || self.formSize == ChartForm.large) && !self.showLabelValue) {
                     Text(self.legend!)
                         .font(.headline)
                         .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                         .padding()
-                }else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
+                } else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
                     LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation),
                               title: .constant(self.getCurrentValue()!.0))
                         .offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
@@ -100,7 +99,7 @@ public struct BarChartView : View {
                     self.touchLocation = value.location.x/self.formSize.width
                     self.showValue = true
                     self.currentValue = self.getCurrentValue()?.1 ?? 0
-                    if(self.data.valuesGiven && self.formSize == ChartForm.medium) {
+                    if(self.data.valuesGiven && (self.formSize == ChartForm.medium || self.formSize == ChartForm.large)) {
                         self.showLabelValue = true
                     }
                 })
