@@ -15,16 +15,13 @@ struct LabelView: View {
         VStack{
             ArrowUp().fill(Color.gray).frame(width: 20, height: 12, alignment: .center).shadow(color: Color.gray, radius: 6, x: 0, y: 0).offset(x: getArrowOffset(offset:self.arrowOffset), y: 12)
             ZStack{
-                RoundedRectangle(cornerRadius: 6).frame(width: 100, height: 32, alignment: .center).foregroundColor(Color.gray).shadow(radius: 6)
-                Text(self.title).font(.callout).foregroundColor(Color.white).bold()
-                ArrowUp().fill(Color.gray).frame(width: 20, height: 12, alignment: .center).zIndex(999).offset(x: getArrowOffset(offset:self.arrowOffset), y: -20)
-
+                Text(self.title).font(.footnote).foregroundColor(Color.white).bold().padding(8).frame(width: UIScreen.main.bounds.width - 36).background(Color.gray).cornerRadius(6)
             }
         }
     }
     
     func getArrowOffset(offset: CGFloat) -> CGFloat {
-        return max(-36,min(36, offset))
+        return max(-(UIScreen.main.bounds.width/2) + 40, min((UIScreen.main.bounds.width/2) - 40, offset))
     }
 }
 
